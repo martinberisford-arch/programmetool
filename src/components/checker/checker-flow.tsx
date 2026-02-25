@@ -20,7 +20,20 @@ export function CheckerFlow({ questions, programmes, preview }: { questions: Que
   const router = useRouter();
 
   const current = questions[index];
-  const progress = Math.round(((index + 1) / questions.length) * 100);
+  const progress = questions.length ? Math.round(((index + 1) / questions.length) * 100) : 0;
+
+  if (!questions.length || !current) {
+    return (
+      <main className="mx-auto min-h-screen max-w-3xl p-6">
+        <Card>
+          <CardContent className="p-6">
+            <h1 className="text-2xl font-semibold text-nhs-blue">Checker unavailable</h1>
+            <p className="mt-2 text-sm text-slate-600">No active questions are configured yet. Please contact the administrator.</p>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
 
   const matched = useMemo(() => {
     return programmes.filter((programme) => {

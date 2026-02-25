@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { ProgrammeManager } from '@/components/admin/programme-manager';
 import { prisma } from '@/lib/prisma';
 

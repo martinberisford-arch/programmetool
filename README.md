@@ -54,7 +54,7 @@ Production-focused Next.js 14 eligibility checker with admin management, conditi
 For production Vercel deployments use Vercel Postgres:
 - Switch the Prisma datasource provider in `prisma/schema.prisma` from `sqlite` to `postgresql`.
 - Set `DATABASE_URL` to the Vercel Postgres connection string.
-- Run `prisma migrate deploy` during build (already in `npm run build`).
+- Run `npm run db:deploy` during CI/CD release step (recommended before or during deployment).
 
 ### Local SQLite
 - Default `.env.example` uses SQLite (`file:./dev.db`) for quick local setup.

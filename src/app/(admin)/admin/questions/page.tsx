@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { QuestionManager } from '@/components/admin/question-manager';
 import { prisma } from '@/lib/prisma';
 

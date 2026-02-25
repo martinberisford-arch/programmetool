@@ -10,21 +10,15 @@ export function QuestionManager({ initialQuestions }: { initialQuestions: Questi
   const [questions, setQuestions] = useState(initialQuestions);
   const [text, setText] = useState('');
 
-const handleSubmit = async () => {
-  if (!text.trim()) return;
-  
-  const response = await fetch('/api/questions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, type: 'SINGLE', options: ['Yes', 'No'] })
-  });
-  
-  if (!response.ok) return;
-  
-  const newQuestion = await response.json();
-  setQuestions((prev) => [...prev, newQuestion as Question]);
-  setText('');
-}
+  async function addQuestion() {
+    const response = await fetch('/api/admin/questions', {
+      method: 'POST',
+      body: JSON.stringify({ text, type: 'SINGLE', options: ['Yes', 'No'] })
+    });
+    if (!response.ok) return;
+    setQuestions((prev) => [...prev, (await response.json()) as Question]);
+    setText('');
+  }
 
   return (
     <div className="space-y-4">

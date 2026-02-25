@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { AnalyticsDashboard } from '@/components/admin/analytics-dashboard';
 import { prisma } from '@/lib/prisma';
 

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { SettingsPanel } from '@/components/admin/settings-panel';
 import { prisma } from '@/lib/prisma';
 
