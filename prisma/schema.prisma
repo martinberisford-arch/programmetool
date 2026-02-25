@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         String    @default("ADMIN")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sessions     Session[]
+  accounts     Account[]
+}
+
+model Programme {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  shortDesc   String
+  longDesc    String
+  link        String
+  contactEmail String
+  imageUrl    String?
+  color       String      @default("#005EB8")
+  status      String      @default("ACTIVE")
+  tagsJson    String      @default("[]")
+  order       Int         @default(0)
+  logicJson   String      @default("{\"operator\":\"AND\",\"conditions\":[]}")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Question {
+  id             String       @id @default(cuid())
+  text           String
+  helpText       String?
+  type           String
+  optionsJson    String       @default("[]")
+  required       Boolean      @default(true)
+  order          Int          @default(0)
+  conditionalJson String      @default("{\"operator\":\"AND\",\"conditions\":[]}")
+  status         String       @default("ACTIVE")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  responses      Response[]
+}
+
+model CheckerSession {
+  id                  String     @id @default(cuid())
+  sessionToken        String     @unique
+  startedAt           DateTime   @default(now())
+  completedAt         DateTime?
+  completionSeconds   Int?
+  completed           Boolean    @default(false)
+  deviceType          String
+  referrer            String?
+  userAgent           String?
+  responses           Response[]
+}
+
+model Response {
+  id          String         @id @default(cuid())
+  sessionId   String
+  questionId  String
+  answerJson  String
+  answeredAt  DateTime       @default(now())
+  session     CheckerSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question    Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([questionId])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
