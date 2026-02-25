@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { QuestionType } from '@prisma/client';
+import { QUESTION_TYPES } from '@/types/domain';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 
 const questionSchema = z.object({
   text: z.string().min(5),
-  type: z.nativeEnum(QuestionType),
+  type: z.enum(QUESTION_TYPES),
   options: z.array(z.string()).min(1)
 });
 

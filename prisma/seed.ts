@@ -1,4 +1,4 @@
-import { PrismaClient, QuestionType } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -17,19 +17,19 @@ async function main() {
   const questions = [
     {
       text: 'Are you currently employed in a healthcare setting?',
-      type: QuestionType.YESNO,
+      type: 'YESNO',
       optionsJson: JSON.stringify(['Yes', 'No']),
       order: 1
     },
     {
       text: 'Which level best describes your qualification?',
-      type: QuestionType.SINGLE,
+      type: 'SINGLE',
       optionsJson: JSON.stringify(['GCSE', 'A-Level', 'Undergraduate', 'Postgraduate']),
       order: 2
     },
     {
       text: 'Which topics interest you?',
-      type: QuestionType.MULTI,
+      type: 'MULTI',
       optionsJson: JSON.stringify(['Mental Health', 'Nursing', 'Leadership', 'Digital Health']),
       order: 3,
       required: false

@@ -1,10 +1,10 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { UserRole } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import { prisma } from './prisma';
+import { ROLES, type UserRole } from '@/types/domain';
 
 const credentialsSchema = z.object({
   email: z.string().email(),
@@ -40,13 +40,13 @@ export const authOptions: NextAuthOptions = {
   pages: { signIn: '/login' },
   callbacks: {
     jwt: async ({ token, user }) => {
-      if (user) token.role = (user as { role?: UserRole }).role ?? UserRole.EDITOR;
+      if (user) token.role = ((user as { role?: UserRole }).role ?? ROLES[1]) as UserRole;
       return token;
     },
     session: async ({ session, token }) => {
       if (session.user) {
         session.user.id = token.sub ?? '';
-        session.user.role = (token.role as UserRole | undefined) ?? UserRole.EDITOR;
+        session.user.role = (token.role as UserRole | undefined) ?? ROLES[1];
       }
       return session;
     }

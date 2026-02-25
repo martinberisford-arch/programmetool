@@ -48,6 +48,8 @@ Production-focused Next.js 14 eligibility checker with admin management, conditi
 - **API endpoints** for session tracking, responses, completion, and CSV export.
 
 ## Database Notes
+> Compatibility note: the schema intentionally stores `role`, `status`, and `question type` as strings (not Prisma enums) so SQLite deployments build cleanly on Vercel without enum connector errors.
+
 ### Recommended for Vercel: Postgres
 For production Vercel deployments use Vercel Postgres:
 - Switch the Prisma datasource provider in `prisma/schema.prisma` from `sqlite` to `postgresql`.
